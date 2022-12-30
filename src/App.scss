@@ -7,3 +7,16 @@
     align-items: center;
     overflow-x: hidden;
 }
+.overlay{
+    position: absolute;
+    top:0;
+    left:10px;
+    width: 200px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(148, 141, 141);
+
+}

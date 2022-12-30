@@ -9,6 +9,8 @@ import formSchema from "../src/form.json"
 
 function App() {
     // initioal form data
+    const [msg,setMsg] = useState("")
+    const [showOverlay,setShowOverlay]= useState(false)
     const [formData, setFormData] = useState({});
     const [validationSchema, setValidationSchema] = useState({});
     const [formErrors,setFormErrors] = useState({})
@@ -69,7 +71,7 @@ const getFormElement = (elementName, elementSchema) => {
         return re.test(String(email).toLowerCase());
       };
 
-
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         setFormErrors({})
@@ -90,7 +92,12 @@ const getFormElement = (elementName, elementSchema) => {
                }
             })
         if(Object.keys(_errors).length===0){
-            console.log("Form submitted")
+            setMsg("Form submitted")
+            initForm(formSchema)
+            setShowOverlay(true)
+            setTimeout(()=>{
+               setShowOverlay(false)
+            },5000)
 
         }
         else{
@@ -118,6 +125,13 @@ const getFormElement = (elementName, elementSchema) => {
             />
 
             </Form>
+    {
+        showOverlay &&
+        <div className='overlay'>
+         {msg}
+    </div>
+    }
+          
         </div>
     );
 }
