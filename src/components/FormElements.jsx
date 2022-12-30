@@ -1,36 +1,28 @@
 import React from 'react';
-import {
-    Formik,
-    Form as FormikForm,
-    Field,
 
-    useFormikContext,
-   
-} from 'formik';
 import "./FormElement.scss"
 export function Form(props) {
     return (
         // creating formik object
-        <Formik
         
-            {...props}
-        >
-            <FormikForm className="form_container" noValidate="">
+            <form 
+            className="form_container" noValidate="">
                 {props.children}
-            </FormikForm>
-        </Formik>)
+            </form>
+        )
 }
 
 
 
 
 export function SubmitButton(props){
-    const { title, ...rest } = props;
-    const { isSubmitting } = useFormikContext();
+    const { title,onsubmit, ...rest } = props;
     
     return (
         <div className='submit_btn'>
-        <button type="submit" {...rest} disabled={isSubmitting}>{title}</button>
+        <button 
+        
+        type="submit" {...rest} >{title}</button>
 
         </div>
     )

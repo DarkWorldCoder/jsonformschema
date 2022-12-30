@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import { Form, TextField, SubmitButton } from './components/FormElements'
-import * as Yup from 'yup';
+
 import SelectField from './components/SelectField';
 import InputField from './components/InputField';
 import formSchema from "../src/form.json"
 
-// const formSchema = {
-  
-// }
 
 function App() {
     // initioal form data
     const [formData, setFormData] = useState({});
     const [validationSchema, setValidationSchema] = useState({});
-
+    const [formErrors,setFormErrors] = useState({})
     useEffect(() => {  
         //  initializing form data
         initForm(formSchema);
@@ -22,7 +19,7 @@ function App() {
 
     const initForm = (formSchema) => {
         let _formData = {};
-        let _validationSchema = {};
+        
        
         // iterating all the keys in schema
         for(var key of Object.keys(formSchema)){
@@ -31,41 +28,26 @@ function App() {
             _formData[key] = "";
 
             // using yup to validate
-
-            if(formSchema[key].type === "text"){
-                _validationSchema[key] = Yup.string();
-            }else if(formSchema[key].type === "email"){
-                _validationSchema[key] = Yup.string().email()
-            }
-            else if(formSchema[key].type === "password"){
-                _validationSchema[key] = Yup.string().required('No password provided.') 
-                .min(8, 'Password is too short - should be 8 chars minimum.')
-                .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
-            }
-            else if(formSchema[key].type === "select"){
-                _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
-            }
-
-            if(formSchema[key].required){
-                _validationSchema[key] = _validationSchema[key].required('Required');
-            }
         }
          
         // seting form data to initial value
         // like {name:"",password:""}
         setFormData(_formData);
-        setValidationSchema(Yup.object().shape({ ..._validationSchema }));
-    }
+        console.log(_formData)
+    };
 
     // generating fields according to the given schema 
 
-    const getFormElement = (elementName, elementSchema) => {
+const getFormElement = (elementName, elementSchema) => {
         // props of object of required data
         const props = {
-            name: elementName,
+            elementName: elementName,
             type:elementSchema.type,
             label: elementSchema.label,
-            options: elementSchema.options
+            options: elementSchema.options,
+            setFormData:setFormData,
+            formData:formData,
+            errors:formErrors
         };
         // console.log(props)
         if (elementSchema.type === "select") {
@@ -80,22 +62,49 @@ function App() {
       
 
     }
+    // regex for validationg email
+    const validateEmail = (email) => {
+        const re =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      };
 
-    const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
-        console.log(values);
-        setSubmitting(false);
 
-        resetForm()
-        console.log("successfully submitted")
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setFormErrors({})
+        var _errors = {}
+        Object.entries(formData).map(([key, val],entry)=>{
+            if(val===""){
+                _errors[key]="Required"
+            }
+            if(key==="email" && val !== ""){
+                if(!validateEmail(val)){
+                   _errors[key]="Email must be valid"
+                }
+            }
+            if(key==="password" && val !== ""){
+               if(val.length <8){
+                _errors[key]="Password must be greater then 8 character"
+            }
+               }
+            })
+        if(Object.keys(_errors).length===0){
+            console.log("Form submitted")
+
+        }
+        else{
+            console.log("Error in submitting form")
+            setFormErrors(_errors)
+        }
+        // console.log(formErrors)
     }
 
     return (
         <div className="app">
             <Form
-                enableReinitialize
-                initialValues={formData}
-                validationSchema={validationSchema}
-                onSubmit={onSubmit}
+             onSubmit={(e)=>handleSubmit(e)}  
+            // onSubmit={()=>onSubmit(formData)}
             >
                
                 {Object.keys(formSchema).map( (key, ind) => (
@@ -105,6 +114,7 @@ function App() {
                 ))}
                    <SubmitButton
               title="Submit"
+              onClick={(e)=>handleSubmit(e)}
             />
 
             </Form>
