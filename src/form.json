@@ -1,0 +1,49 @@
+{
+"name": {
+    "type": "text",
+    "label": "Name",
+    "required": true
+},
+
+"hobbies": {
+    "type": "text",
+    "label": "Hoobies",
+    "required": true
+},
+"dateofbirth":{
+    "type":"date",
+    "label":"Birthday"
+   
+
+},
+"email": {
+    "type": "email",
+    "label": "Email",
+    "required": true
+},
+"password":{
+ "type":"password",
+ "label":"Password",
+ "required":true
+},
+"file":{
+    "type":"file",
+    "label":"File"
+    
+   },
+"role": {
+    "type": "select",
+    "label": "Role",
+    "required": true,
+    "options": [
+        {
+            "label": "Admin",
+            "value": "admin"
+        },
+        {
+            "label": "User",
+            "value": "user"
+        }
+    ]
+}
+}

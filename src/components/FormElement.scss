@@ -1,0 +1,37 @@
+.form_container{
+    width: 50%;;
+    // height: 90%;
+   
+background: rgba(6, 14, 88, 0.41);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(8.1px);
+-webkit-backdrop-filter: blur(8.1px);
+border: 1px solid rgba(6, 14, 88, 0.1);
+padding: 10px;
+overflow-x: hidden;
+@media(max-width:768px){
+    width: 90%;
+}
+}
+.submit_btn{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button{
+        padding: 10px;
+        width: 150px;
+        height: 60px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 10px;
+        outline: none;
+        border: none;
+        margin-top: 10px;
+        cursor: pointer;
+        font-family: "Ubuntu";
+        color:rgb(43, 41, 41);
+        background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+    }
+}
