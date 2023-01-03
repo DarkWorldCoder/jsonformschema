@@ -2,13 +2,9 @@ import { ErrorMessage, Field } from 'formik'
 import React from 'react'
 import "./InputField.scss"
 const InputField = (props) => {
-    const { elementName,errors, type,label, placeholder,setFormData,formData, ...rest } = props
+    const { elementName,errors, type,label, placeholder,value,handleChange, ...rest } = props
      
-    const handleFileChange = (e)=>{
-      const files = e.target.files[0]
-      setFormData(prev=>({...prev,["file"]:files}))
-    
-    }
+   
 
     
     return (
@@ -23,8 +19,9 @@ const InputField = (props) => {
  or
                <input type="file" 
                     name={elementName}
-                    onChange={handleFileChange}
+                    onChange={(e)=>handleChange(e)}
                     id={elementName}
+                    multiple
                     placeholder={placeholder || ""} 
                     {...rest}
                     />
@@ -34,8 +31,8 @@ const InputField = (props) => {
             ):(
                 <>
             <input
-                    value={formData[elementName]}
-                    onChange={(e)=>setFormData(prev=>({...prev,[elementName]:e.target.value}))}
+                    value={value}
+                    onChange={(e)=>handleChange(e)}
                                     className="form-control"
                                     type={type}
                                     name={elementName}

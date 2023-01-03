@@ -27,6 +27,7 @@ function App() {
         for(var key of Object.keys(formSchema)){
             
             // creating empty dormdata with key
+            // if(key==='')
             _formData[key] = "";
 
             // using yup to validate
@@ -35,41 +36,65 @@ function App() {
         // seting form data to initial value
         // like {name:"",password:""}
         setFormData(_formData);
-        console.log(_formData)
+        // console.log(_formData)
     };
 
     // generating fields according to the given schema 
 
-const getFormElement = (elementName, elementSchema) => {
-        // props of object of required data
-        const props = {
-            elementName: elementName,
-            type:elementSchema.type,
-            label: elementSchema.label,
-            options: elementSchema.options,
-            setFormData:setFormData,
-            formData:formData,
-            errors:formErrors
-        };
-        // console.log(props)
-        if (elementSchema.type === "select") {
-            return <SelectField  {...props} />
+    const getFormElement = (elementName, elementSchema) => {
+            // props of object of required data
+            const props = {
+                elementName: elementName,
+                type:elementSchema.type,
+                label: elementSchema.label,
+                options: elementSchema.options,
+                handleChange:handleChange,
+                value:formData[elementName],
+                errors:formErrors
+            };
+            // console.log(props)
+            if (elementSchema.type === "select") {
+                return <SelectField  {...props} />
+            }
+            else{
+                return <InputField {...props} />
+            }
+
+        
+
+        
+
         }
-        else{
-            return <InputField {...props} />
-        }
-
-       
-
-      
-
-    }
     // regex for validationg email
     const validateEmail = (email) => {
         const re =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
       };
+
+    // global handle Change
+
+    const handleChange = (e)=>{
+
+        const name= e.target.name 
+        const value = e.target.value
+        // console.log(name)
+        if(name==="file"){
+            const file = e.target.files
+            
+            setFormData(prev=>({
+                ...prev,[name]:file
+            }))
+
+        }
+        else{
+
+            setFormData(prev=>({
+                ...prev,[name]:value
+            }))
+        }
+    
+    }
 
     
     const handleSubmit = (e) => {
@@ -93,6 +118,7 @@ const getFormElement = (elementName, elementSchema) => {
             })
         if(Object.keys(_errors).length===0){
             setMsg("Form submitted")
+            console.log(formData)
             initForm(formSchema)
             setShowOverlay(true)
             setTimeout(()=>{

@@ -1,15 +1,16 @@
 import React from 'react'
 import "./SelectField.scss"
 const SelectField = (props) => {
-    const { elementName,errors,formData,setFormData, label, options } = props
+    const { elementName,errors,value,handleChange, label, options } = props
   return (
     <div className='select_field'>
     {label && <label for={elementName}>{label}</label>}
     <select
-        onChange={e=>setFormData(prev=>({...prev,[elementName]:e.target.value}))}
+        onChange={(e)=>handleChange(e)}
         id={elementName}
         name={elementName}
-        value={formData[elementName]}
+        value={value}
+        
     >
         <option value="" >Choose...</option>
         {options.map((optn, index) => <option value={optn.value} label={optn.label || optn.value} />)}
